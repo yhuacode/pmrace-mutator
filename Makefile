@@ -31,7 +31,7 @@ clevel-%.o : %.c
 	gcc -fPIC -g -o $@ -c $< -I../AFLplusplus/include $(CFLAGS) -DCLEVEL
 
 test-memcached: memcached-mutator.so
-	-@kill -9 $(shell lsof -t -i:11211)
+	-@kill -9 $(shell lsof -t -i:11211) 2>/dev/null
 	-@rm -rf $(AFL_OUTPUT_DIR)/out_memcached
 ifeq ($(USE_AFL), 1)
 	@$(AFL_FUZZ_BIN) -m 1024 -i $(AFL_INITIAL_SEEDS_DIR)/memcached -o $(AFL_OUTPUT_DIR)/out_memcached -- $(PM_WORKLOADS_DIR)/memcached-pmem/memcached -A -o pslab_force,pslab_file=$(PM_POOL_DIR)/mem_pool
